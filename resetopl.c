@@ -101,6 +101,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "OPL not detected at 0x%x\n", base);
 		exit(1);
 	}
+
 	/* Read status */
 	val1 = inportb(base);
 
@@ -134,9 +135,14 @@ int main(int argc, char **argv) {
 	/* Test/Waveform select */
 	set_registers(base, 0x01, 0x01, 0, opl3);
 
-	/* OPL2 */
-	write_opl(base, 1, 4, 0);
-	write_opl(base, 1, 5, 0);
+	/* OPL3 */
+	if (opl3) {
+		/* 4-op enable */
+		write_opl(base, 1, 4, 0);
+
+		/* OPL3 mode */
+		write_opl(base, 1, 5, 0);
+	}
 
 	return 0;
 }
