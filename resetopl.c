@@ -21,8 +21,10 @@
  * IN THE SOFTWARE.
  */
 
+#include <stdlib.h>
 #include <stdio.h>
-#include <io.h>
+#include <conio.h>
+#include <dos.h>
 
 void write_opl(unsigned int base, int opl3, unsigned char reg, unsigned char v) {
 	unsigned int oplbase = base;
@@ -30,10 +32,10 @@ void write_opl(unsigned int base, int opl3, unsigned char reg, unsigned char v) 
 	if (opl3) {
 		oplbase += 2;
 	}
-	outportb(oplbase, reg);
-	inportb(base);
-	outportb(oplbase+1, v);
-	inportb(base);
+	outp(oplbase, reg);
+	inp(base);
+	outp(oplbase+1, v);
+	inp(base);
 }
 
 void set_registers(unsigned int base, unsigned char low, unsigned char high, unsigned char val, int opl3) {
@@ -77,7 +79,7 @@ int main(int argc, char **argv) {
 	write_opl(base, 0, 0x4, 0x80);
 
 	/* Read status */
-	val1 = inportb(base);
+	val1 = inp(base);
 
 	/* Set timer 1 to 0xff */
 	write_opl(base, 0, 0x2, 0xff);
@@ -89,7 +91,7 @@ int main(int argc, char **argv) {
 	delay(10);
 
 	/* Read status */
-	val2 = inportb(base);
+	val2 = inp(base);
 
 	/* Reset timer 1 and 2 */
 	write_opl(base, 0, 0x4, 0x60);
@@ -103,7 +105,7 @@ int main(int argc, char **argv) {
 	}
 
 	/* Read status */
-	val1 = inportb(base);
+	val1 = inp(base);
 
 	if ((val1 & 0x06) == 0x00) {
 		opl3 = 1;
@@ -145,4 +147,4 @@ int main(int argc, char **argv) {
 	}
 
 	return 0;
-}
+}
