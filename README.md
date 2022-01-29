@@ -16,6 +16,13 @@ C:\> resetopl 0x240
 Resetting OPL3 at 0x240
 ```
 
+You can also override the base by setting the DOS environment variable `resetopl`:
+```
+C:\> set resetopl=0x388
+C:\> resetopl
+Resetting OPL3 at 0x388
+```
+
 The utility detects if the OPL-chip is present and will abort if the chip
 is not detected:
 ```
