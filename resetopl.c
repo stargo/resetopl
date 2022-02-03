@@ -52,11 +52,23 @@ void set_registers(unsigned int base, unsigned char low, unsigned char high, uns
 int main(int argc, char **argv) {
 	unsigned int base;
 	unsigned char val1, val2;
+	char *dosenvvar = NULL;
 	int opl3 = 0;
 
 	if (argc == 1) {
-		base = 0x220;
-		printf("No argument given, assuming base at 0x%x\n", base);
+		dosenvvar = getenv("RESETOPL");
+		if (dosenvvar == NULL) {
+			base = 0x220;
+			printf("No argument given, assuming base at 0x%x\n", base);
+		}
+		else {
+			char *endp;
+			base = strtoul(dosenvvar, &endp, 0);
+			if (*endp != '\0') {
+				fprintf(stderr, "Invalid base address %s in environment variable!\n", dosenvvar);
+				exit(1);
+			}
+		}
 	} else if (argc == 2) {
 		char *endp;
 		base = strtoul(argv[1], &endp, 0);
